@@ -48,6 +48,11 @@ func AfterFunc(seconds int, callback TimeoutCallback) {
 	timeout.AfterFunc(seconds, callback)
 }
 
+// AfterFunc works similar to time.AfterFunc, with the difference that we cache timers based on the timeout length
+// therefore we use Seconds as a "granular enough" unit for caching
+// any timeout entry older than 500ms will be recreated and overwritten
+// TLDR; the purpose of all this is to avoid spawning thousands of timers under heavy load
+// the standard usecase would be to use a timeout for some form of request, where the timeout is a few seconds
 func (t *Timeout) AfterFunc(seconds int, callback TimeoutCallback) {
 	//no timeout, just invoke it
 	if seconds == 0 {
