@@ -53,6 +53,7 @@ func AfterFunc(seconds int, callback TimeoutCallback) {
 // any timeout entry older than 500ms will be recreated and overwritten
 // TLDR; the purpose of all this is to avoid spawning thousands of timers under heavy load
 // the standard usecase would be to use a timeout for some form of request, where the timeout is a few seconds
+// due to the 500ms expiration, if you set up a timeout using AfterFunc(10), this in reality means 9.5-10 seconds before timeout
 func (t *Timeout) AfterFunc(seconds int, callback TimeoutCallback) {
 	//no timeout, just invoke it
 	if seconds == 0 {
